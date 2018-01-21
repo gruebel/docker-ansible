@@ -1,0 +1,39 @@
+sudo: required
+
+language: generic
+
+services:
+  - docker
+
+env:
+  global:
+    - PROJECT_NAME=ansible
+    - ANSIBLE_VERSION=2.4.2.0
+    - DOCKER_IMAGE_NAME=$DOCKER_USER/$PROJECT_NAME
+
+before_install:
+  - sudo apt-get update
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+  - docker --version
+
+matrix:
+  include:
+    - env: VARIANT=aws
+
+script:
+  # build Docker image
+  - |
+    docker build \
+      --build-arg ANSIBLE_VERSION=${ANSIBLE_VERSION} \
+      --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
+      -t ${DOCKER_IMAGE_NAME}:test \
+      ${VARIANT}
+  # run tests
+  - DOCKER_IMAGE_VERSION_NAME=${DOCKER_IMAGE_NAME}:test ./tests/check.sh
+  # push Docker image
+  - DOCKER_IMAGE_VERSION=${ANSIBLE_VERSION}-${VARIANT}
+  - docker login -u "${DOCKER_USER}" -p "${DOCKER_PASS}"
+  - docker tag ${DOCKER_IMAGE_NAME}:test ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_VERSION}
+  - docker push ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_VERSION}
+  - docker tag ${DOCKER_IMAGE_NAME}:test ${DOCKER_IMAGE_NAME}:${VARIANT}
+  - docker push ${DOCKER_IMAGE_NAME}:${VARIANT}
