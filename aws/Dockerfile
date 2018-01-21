@@ -1,11 +1,18 @@
 FROM python:2.7.14-alpine3.7
 
+ARG ANSIBLE_VERSION
+ARG BUILD_DATE
+
+LABEL org.label-schema.build-date=${BUILD_DATE} \
+      org.label-schema.schema-version="1.0"
+
+# default region
 ENV AWS_DEFAULT_REGION=us-east-1
 
-ENV ANSIBLE_VERSION=2.4.2.0 \
-    AWS_CLI_VERSION=1.14.25 \
+# needed pip packages
+ENV AWS_CLI_VERSION=1.14.29 \
     BOTO_VERSION=2.48.0 \
-    BOTO3_VERSION=1.5.15
+    BOTO3_VERSION=1.5.19
 
 RUN set -ex \
  && apk add --no-cache --virtual .run-deps \
@@ -28,4 +35,4 @@ RUN set -ex \
  
 WORKDIR /root/ansible
 
-CMD ["ansible", "--help"]
+ENTRYPOINT ["ansible"]
