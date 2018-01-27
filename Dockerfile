@@ -9,11 +9,6 @@ LABEL org.label-schema.build-date=${BUILD_DATE} \
 # default region
 ENV AWS_DEFAULT_REGION=us-east-1
 
-# needed pip packages
-ENV AWS_CLI_VERSION=1.14.32 \
-    BOTO_VERSION=2.48.0 \
-    BOTO3_VERSION=1.5.22
-
 RUN set -ex \
  && apk add --no-cache --virtual .run-deps \
     git \
@@ -28,9 +23,6 @@ RUN set -ex \
     musl-dev \
  && pip install \
     ansible==${ANSIBLE_VERSION} \
-    awscli==${AWS_CLI_VERSION} \
-    boto==${BOTO_VERSION} \
-    boto3==${BOTO3_VERSION} \
  && apk del .build-deps
  
 WORKDIR /root/ansible
