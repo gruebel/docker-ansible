@@ -9,6 +9,7 @@ env:
   global:
     - PROJECT_NAME=ansible
     - ANSIBLE_VERSION=2.4.2.0
+    - PYTHON_VERSION=2.7.14
     - DOCKER_IMAGE_NAME=$DOCKER_USER/$PROJECT_NAME
 
 before_install:
@@ -18,7 +19,14 @@ before_install:
 
 matrix:
   include:
-    - env: VARIANT=aws
+    - env:
+        - VARIANT=.
+        - DOCKER_IMAGE_VERSION_FULL=${ANSIBLE_VERSION}-python${PYTHON_VERSION}
+        - DOCKER_IMAGE_VERSION_SIMPLE=${ANSIBLE_VERSION}
+    - env:
+        - VARIANT=aws
+        - DOCKER_IMAGE_VERSION_FULL=${ANSIBLE_VERSION}-${VARIANT}-python${PYTHON_VERSION}
+        - DOCKER_IMAGE_VERSION_SIMPLE=${VARIANT}
 
 script:
   # build Docker image
@@ -31,9 +39,8 @@ script:
   # run tests
   - DOCKER_IMAGE_VERSION_NAME=${DOCKER_IMAGE_NAME}:test ./tests/check.sh
   # push Docker image
-  - DOCKER_IMAGE_VERSION=${ANSIBLE_VERSION}-${VARIANT}
   - docker login -u "${DOCKER_USER}" -p "${DOCKER_PASS}"
-  - docker tag ${DOCKER_IMAGE_NAME}:test ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_VERSION}
-  - docker push ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_VERSION}
-  - docker tag ${DOCKER_IMAGE_NAME}:test ${DOCKER_IMAGE_NAME}:${VARIANT}
-  - docker push ${DOCKER_IMAGE_NAME}:${VARIANT}
+  - docker tag ${DOCKER_IMAGE_NAME}:test ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_VERSION_FULL}
+  - docker push ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_VERSION_FULL}
+  - docker tag ${DOCKER_IMAGE_NAME}:test ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_VERSION_SIMPLE}
+  - docker push ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_VERSION_SIMPLE}
