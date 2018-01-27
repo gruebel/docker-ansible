@@ -27,6 +27,10 @@ matrix:
         - VARIANT=aws
         - DOCKER_IMAGE_VERSION_FULL=${ANSIBLE_VERSION}-${VARIANT}-python${PYTHON_VERSION}
         - DOCKER_IMAGE_VERSION_SIMPLE=${VARIANT}
+    - env:
+        - VARIANT=azure
+        - DOCKER_IMAGE_VERSION_FULL=${ANSIBLE_VERSION}-${VARIANT}-python${PYTHON_VERSION}
+        - DOCKER_IMAGE_VERSION_SIMPLE=${VARIANT}
 
 script:
   # build Docker image
