@@ -10,9 +10,9 @@ LABEL org.label-schema.build-date=${BUILD_DATE} \
 ENV AWS_DEFAULT_REGION=us-east-1
 
 # needed pip packages
-ENV AWS_CLI_VERSION=1.14.29 \
+ENV AWS_CLI_VERSION=1.14.32 \
     BOTO_VERSION=2.48.0 \
-    BOTO3_VERSION=1.5.19
+    BOTO3_VERSION=1.5.22
 
 RUN set -ex \
  && apk add --no-cache --virtual .run-deps \
