@@ -26,5 +26,3 @@ RUN set -ex \
  && apk del .build-deps
  
 WORKDIR /root/ansible
-
-ENTRYPOINT ["ansible"]
