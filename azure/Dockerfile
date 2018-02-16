@@ -1,6 +1,6 @@
 FROM python:2.7.14-alpine3.7
 
-ARG ANSIBLE_VERSION=2.4.2.0
+ARG ANSIBLE_VERSION=2.4.3.0
 ARG BUILD_DATE
 
 LABEL org.label-schema.build-date=${BUILD_DATE} \

@@ -1,6 +1,6 @@
 FROM python:2.7.14-alpine3.7
 
-ARG ANSIBLE_VERSION=2.4.2.0
+ARG ANSIBLE_VERSION=2.4.3.0
 ARG BUILD_DATE
 
 LABEL org.label-schema.build-date=${BUILD_DATE} \
@@ -10,9 +10,9 @@ LABEL org.label-schema.build-date=${BUILD_DATE} \
 ENV AWS_DEFAULT_REGION=us-east-1
 
 # needed pip packages
-ENV AWS_CLI_VERSION=1.14.32 \
+ENV AWS_CLI_VERSION=1.14.40 \
     BOTO_VERSION=2.48.0 \
-    BOTO3_VERSION=1.5.22
+    BOTO3_VERSION=1.5.30
 
 RUN set -ex \
  && apk add --no-cache --virtual .run-deps \
